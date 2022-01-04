@@ -1,0 +1,95 @@
+<div>
+  <h2 id="page-heading" data-cy="BlogEntryHeading">
+    <span jhiTranslate="blogBlogApp.blogEntry.home.title">Blog Entries</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="blogBlogApp.blogEntry.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-blog-entry"
+        [routerLink]="['/blog-entry/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="blogBlogApp.blogEntry.home.createLabel"> Create a new Blog Entry </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="blogEntries?.length === 0">
+    <span jhiTranslate="blogBlogApp.blogEntry.home.notFound">No blogEntries found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="blogEntries && blogEntries.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr>
+          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
+          <th scope="col"><span jhiTranslate="blogBlogApp.blogEntry.title">Title</span></th>
+          <th scope="col"><span jhiTranslate="blogBlogApp.blogEntry.content">Content</span></th>
+          <th scope="col"><span jhiTranslate="blogBlogApp.blogEntry.date">Date</span></th>
+          <th scope="col"><span jhiTranslate="blogBlogApp.blogEntry.blog">Blog</span></th>
+          <th scope="col"><span jhiTranslate="blogBlogApp.blogEntry.tag">Tag</span></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let blogEntry of blogEntries; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/blog-entry', blogEntry.id, 'view']">{{ blogEntry.id }}</a>
+          </td>
+          <td>{{ blogEntry.title }}</td>
+          <td>{{ blogEntry.content }}</td>
+          <td>{{ blogEntry.date | formatMediumDatetime }}</td>
+          <td>
+            <div *ngIf="blogEntry.blog">
+              <a [routerLink]="['/blog', blogEntry.blog?.id, 'view']">{{ blogEntry.blog?.name }}</a>
+            </div>
+          </td>
+          <td>
+            <span *ngFor="let tag of blogEntry.tags; let last = last">
+              <a class="form-control-static" [routerLink]="['/blog-tag', tag.id, 'view']">{{ tag.name }}</a
+              >{{ last ? '' : ', ' }}
+            </span>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/blog-entry', blogEntry.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/blog-entry', blogEntry.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(blogEntry)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

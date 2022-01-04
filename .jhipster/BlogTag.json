@@ -1,0 +1,30 @@
+{
+  "name": "BlogTag",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "minlength"],
+      "fieldValidateRulesMinlength": "2"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "blogEntry",
+      "otherEntityRelationshipName": "tag",
+      "relationshipName": "entry",
+      "ownerSide": false
+    }
+  ],
+  "entityTableName": "blog_tag",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20220104030237"
+}
